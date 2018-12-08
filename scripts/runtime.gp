@@ -6,7 +6,7 @@ set output "statistic.png"
 
 set key right 
 
-plot [:201][:]\
+plot [:401][:]\
 "output.txt" using 1:2 with linespoints linewidth 2 title "U", \
 "output.txt" using 1:3 with linespoints linewidth 2 title "V", \
 "output.txt" using 1:4 with linespoints linewidth 2 title "W", \

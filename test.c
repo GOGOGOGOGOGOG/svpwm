@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#define PWM_MAX_COUNT 250
+#define PWM_MAX_COUNT 290
 #define M_PI 3.14159265358979323846
 int i=0;
 
@@ -56,12 +56,12 @@ void svpwm(double Umax,double Vdc,double angle,double* u,double* v,double* w){
         tc=tb+t2;
        
         switch(sector){
-            case 1:*u=tb;*v=ta;*w=tc;break;
-            case 2:*u=ta;*v=tc;*w=tb;break;
-            case 3:*u=ta;*v=tb;*w=tc;break;
-            case 4:*u=tc;*v=tb;*w=ta;break;
-            case 5:*u=tc;*v=ta;*w=tb;break;
-            case 6:*u=tb;*v=tc;*w=ta;break;
+            case 1:*u=tb;*v=ta;*w=tc;break; // section 1
+            case 2:*u=ta;*v=tc;*w=tb;break; // section 2
+            case 3:*u=ta;*v=tb;*w=tc;break; // section 3
+            case 4:*u=tc;*v=tb;*w=ta;break; // section 4
+            case 5:*u=tc;*v=ta;*w=tb;break; // section 5
+            case 6:*u=tb;*v=tc;*w=ta;break; // section 6
         }
 }
 
@@ -76,8 +76,8 @@ int main (){
         i++;
         svpwm(310,550,angle,&u,&v,&w);
     
-        fprintf(fp,"%d   %d   %d   %d\n",(int)i,(int)u,(int)v,(int)w); 
-        angle+=2*M_PI*0.01;
+        fprintf(fp,"%d   %d   %d   %d\n",(int)i,(int)u,(int)v,(int)w); //move to the output.txt
+        angle+=1*M_PI*0.01; //increase each test angle
     }
     fclose(fp);
     
@@ -87,6 +87,3 @@ int main (){
 
     system("Pause");
 }
-//gnuplot scripts/runtime.gp
-//eog runtime.png
-//gcc -Wall test.c -o test -lm
