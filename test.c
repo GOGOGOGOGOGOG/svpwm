@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#define PWM_MAX_COUNT 100
+#define PWM_MAX_COUNT 250
 #define M_PI 3.14159265358979323846
 int i=0;
+
 void svpwm(double Umax,double Vdc,double angle,double* u,double* v,double* w){
         double Ua,Ub;
      double Usalfa,Usbeta;
@@ -13,13 +14,13 @@ void svpwm(double Umax,double Vdc,double angle,double* u,double* v,double* w){
       double ta,tb,tc;
       //  double p1,p2,p3;      
         
-        Ua=sin(angle);
-        Ub=sin(angle-M_PI*2/3);
-        
+        Ua=sin(angle);// sin(0)
+        Ub=sin(angle-M_PI*2/3); // -sin(2/3pi)
+       // Uc=sin(angle+M_PI*2/3);
         //Clarke
         Usalfa=Ua;
         Usbeta=(2*Ub+Ua)*0.57735026918963; //3^(-1/3)=0.57735026918963
-       
+        
         sector=0;  
         if(Usbeta>0)
             sector+=1;
@@ -67,18 +68,23 @@ void svpwm(double Umax,double Vdc,double angle,double* u,double* v,double* w){
 int main (){
     double angle=0;
     double u,v,w;
-    FILE *fp;
+   FILE *fp;  
+   fp=fopen("output.txt","w"); 
+   if (fp!=NULL){
 
-fp = fopen("output.txt","w");
-if(fp == NULL){
-    printf("Can't create file.\n");
-}
     while(angle<4*M_PI){
         i++;
         svpwm(310,550,angle,&u,&v,&w);
-        printf("%d   %d   %d   %d\n",(int)i,(int)u,(int)v,(int)w);   
+    
+        fprintf(fp,"%d   %d   %d   %d\n",(int)i,(int)u,(int)v,(int)w); 
         angle+=2*M_PI*0.01;
     }
+    fclose(fp);
+    
+   }
+   else
+        printf("open file error\n");
+
     system("Pause");
 }
 //gnuplot scripts/runtime.gp
