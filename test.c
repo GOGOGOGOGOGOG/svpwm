@@ -14,8 +14,8 @@ void svpwm(double Umax,double Vdc,double angle,double* u,double* v,double* w){
       double ta,tb,tc;
       //  double p1,p2,p3;      
         
-        Ua=sin(angle);// sin(0)
-        Ub=sin(angle-M_PI*2/3); // -sin(2/3pi)
+        Ua=cos(angle);// sin(0)
+        Ub=cos(angle-M_PI*2/3); // -sin(2/3pi)
        // Uc=sin(angle+M_PI*2/3);
         //Clarke
         Usalfa=Ua;
