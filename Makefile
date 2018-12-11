@@ -35,5 +35,6 @@ clean:
 	$(RM) $(deps)
 	rm -f  output.txt 
 	rm -f  statistic.png
+	rm -f  123.txt
 
 -include $(deps)
