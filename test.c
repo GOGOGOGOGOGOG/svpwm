@@ -3,8 +3,8 @@
 #include <math.h>
 #define PWM_MAX_COUNT 400
 #define M_PI 3.14159265358979323846
-int i=0;
-void printxyz(double x,double y,double z);
+int i=0,a=0;
+int printxyz(int a ,double x,double y,double z);
 void svpwm(double Umax,double Vdc,double angle,double* u,double* v,double* w){
         double Ua,Ub;
      double Usalfa,Usbeta;
@@ -36,22 +36,22 @@ void svpwm(double Umax,double Vdc,double angle,double* u,double* v,double* w){
         Z=(1.732*Usbeta-3*Usalfa)*PWM_MAX_COUNT/2;
         switch(sector){
             case 1:t1=Z;t2=Y;
-            printxyz(0.0,Y,Z);
+            a=printxyz(a,0.0,Y,Z);
             break;// N=1 第二區
             case 2:t1=Y;t2=-X;
-            printxyz(-X,Y,0.0);//紀錄x,y,z的值
+            a=printxyz(a,-X,Y,0.0);//紀錄x,y,z的值
             break;//N=2 第六區
             case 3:t1=-Z;t2=X;
-             printxyz(X,0.0,-Z);//紀錄x,y,z的值
+             a=printxyz(a,X,0.0,-Z);//紀錄x,y,z的值
             break; // N=3 第一區
             case 4:t1=-X;t2=Z;
-            printxyz(-X,0.0,Z);//紀錄x,y,z的值
+            a=printxyz(a,-X,0.0,Z);//紀錄x,y,z的值
             break; //N=4 第四區
             case 5:t1=X;t2=-Y;
-            printxyz(X,-Y,0.0);//紀錄x,y,z的值
+            a=printxyz(a,X,-Y,0.0);//紀錄x,y,z的值
             break; //N=5 第三區
             case 6:t1=-Y;t2=-Z;
-            printxyz(0.0,-Y,-Z);
+            a=printxyz(a,0.0,-Y,-Z);
             break;//N=6 第五區
         }
        
@@ -99,17 +99,18 @@ int main (){
 
     system("Pause");
 }
-void printxyz(double x,double y,double z){
+int printxyz(int a ,double x,double y,double z){
 FILE *fp1;
 
  
    fp1=fopen("123.txt","a"); 
    if (fp1!=NULL){
-   fprintf(fp1,"%f  %f   %f\n",(double)x,(double)y,(double)z); //move to  the 123.txt
+   fprintf(fp1,"%d %f  %f   %f\n",(int) a,(double)x,(double)y,(double)z); //move to  the 123.txt
    fclose(fp1);
    }
 else
  printf("open file error\n");
-
+a=a+1;
+return a;
 ////
 }

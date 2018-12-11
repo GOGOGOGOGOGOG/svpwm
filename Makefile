@@ -21,9 +21,11 @@ test : test.c
 
  
 
-plot: output.txt 
+plot: output.txt 123.txt
 	gnuplot scripts/runtime.gp
 	eog statistic.png
+	gnuplot scripts/runtime2.gp
+	eog statistic1.png
 		
 
 calculate: test.c
