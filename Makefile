@@ -34,5 +34,6 @@ clean:
 	$(RM) $(TESTS) $(OBJS)
 	$(RM) $(deps)
 	rm -f  output.txt 
+	rm -f  statistic.png
 
 -include $(deps)

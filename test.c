@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#define PWM_MAX_COUNT 290
+#define PWM_MAX_COUNT 6000
 #define M_PI 3.14159265358979323846
 int i=0;
 
@@ -20,33 +20,33 @@ void svpwm(double Umax,double Vdc,double angle,double* u,double* v,double* w){
         //Clarke
         Usalfa=Ua;
         Usbeta=(2*Ub+Ua)*0.57735026918963; //3^(-1/3)=0.57735026918963
-        
+        //c
         sector=0;  
         if(Usbeta>0)
-            sector+=1;
+            sector+=1; // 扇形区域判断
        
-        if(-Usbeta+1.732*Usalfa>0)
+        if(-Usbeta+1.732*Usalfa>0) //扇形区域判断
             sector+=2;
        
-        if(Usbeta+1.732*Usalfa<0)
+        if(Usbeta+1.732*Usalfa<0) //扇形区域判断
             sector+=4;
  
-        X=1.732*Usbeta*PWM_MAX_COUNT;
+        X=1.732*Usbeta*PWM_MAX_COUNT;  //其他扇形区个向量的作用时间 
         Y=(1.732*Usbeta+3*Usalfa)*PWM_MAX_COUNT/2;
         Z=(1.732*Usbeta-3*Usalfa)*PWM_MAX_COUNT/2;
         switch(sector){
-            case 1:t1=Z;t2=Y;break;
-            case 2:t1=Y;t2=-X;break;
-            case 3:t1=-Z;t2=X;break;
-            case 4:t1=-X;t2=Z;break;
-            case 5:t1=X;t2=-Y;break;
-            case 6:t1=-Y;t2=-Z;break;
+            case 1:t1=Z;t2=Y;break;// N=1 第二区
+            case 2:t1=Y;t2=-X;break;//N=2 第六区
+            case 3:t1=-Z;t2=X;break; // N=3 第一区
+            case 4:t1=-X;t2=Z;break; //N=4 第四区
+            case 5:t1=X;t2=-Y;break; //N=5 第三区
+            case 6:t1=-Y;t2=-Z;break;//N=6 第五区
         }
        
         t1=t1*Umax/Vdc;
         t2=t2*Umax/Vdc;
        
-        if(t1+t2>PWM_MAX_COUNT){
+        if(t1+t2>PWM_MAX_COUNT){  
             t1=PWM_MAX_COUNT*t1/(t1+t2);
             t2=PWM_MAX_COUNT*t2/(t1+t2);
         }
@@ -56,8 +56,8 @@ void svpwm(double Umax,double Vdc,double angle,double* u,double* v,double* w){
         tc=tb+t2;
        
         switch(sector){
-            case 1:*u=tb;*v=ta;*w=tc;break; // section 1
-            case 2:*u=ta;*v=tc;*w=tb;break; // section 2
+            case 1:*u=tb;*v=ta;*w=tc;break; // section 1 确定各扇形时间区的切换点
+            case 2:*u=ta;*v=tc;*w=tb;break; // section 2  
             case 3:*u=ta;*v=tb;*w=tc;break; // section 3
             case 4:*u=tc;*v=tb;*w=ta;break; // section 4
             case 5:*u=tc;*v=ta;*w=tb;break; // section 5
