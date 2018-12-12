@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#define PWM_MAX_COUNT 400
+#define PWM_MAX_COUNT 5000
 #define M_PI 3.14159265358979323846
 int i=0,a=0;
 int printxyz(int a ,double x,double y,double z);
@@ -112,5 +112,5 @@ else
  printf("open file error\n");
 a=a+1;
 return a;
-////
+//
 }
